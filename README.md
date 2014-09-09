@@ -1,4 +1,4 @@
-pantera
+panther
 =======
 
 # Platform for Analysis of Cancer Therapy
