@@ -10,3 +10,6 @@
 
 # RStudio project files
 *.Rproj
+
+# Data
+/data/

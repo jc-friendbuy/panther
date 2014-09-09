@@ -4,21 +4,20 @@ library(shiny)
 shinyUI(fluidPage(
     
     # Application title
-    titlePanel("Hello Shiny!"),
+    titlePanel("Prototipo de visualización de datos"),
     
     # Sidebar with a slider input for the number of bins
     sidebarLayout(
         sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
+            selectInput("select", 
+                        label = h3("Visualización"), 
+                        choices = list("Vis 1" = 1, "Vis 2" = 2, "Vis 3" = 3), 
+                        selected = 1)
         ),
         
         # Show a plot of the generated distribution
         mainPanel(
-            plotOutput("distPlot")
+            plotOutput("visualization")
         )
     )
 ))
