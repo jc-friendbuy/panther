@@ -1,11 +1,31 @@
 library(shiny)
-source('src/analysis/basic.R')
+source('src/visualization_config.R')
 
 shinyServer(function(input, output) {
-    # Determine the appropriate render function for the selected visualization, and     
-    # query / calculate the results.  Then, return it so it can be displayed on the UI.
-    output$visualization <- renderPlot({
-        data.to.plot <- SelectSimpleDrugSubset()
-        do.call(data.to.plot$fun, data.to.plot$args)
+    # Compute the results of the requested visualization and determine
+    # the appropriate render function so it can be displayed on the UI.
+    computed.visualization <- ExecuteVisualization(
+      input$visualization.select
+    )
+
+    rendering.function <- SelectRenderingFunction(
+      computed.visualization$graphing.function.name
+    )
+
+    output$visualization <- rendering.function({
+        do.call(
+          computed.visualization$graphing.function.name,
+          computed.visualization$args
+        )
     })
 })
+
+SelectRenderingFunction <- function(visualization.function) {
+  switch(visualization.function,
+    plot = renderPlot
+  )
+}
+
+ExecuteVisualization <- function(visualization) {
+  visualization.list[[visualization]]()
+}

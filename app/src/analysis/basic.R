@@ -1,14 +1,13 @@
-SelectSimpleDrugSubset <- function() {
-    all.data <- data$Load()
-    all.data
+source('src/data/data.R')
+
+TAE684 <- function() {
+    all.data <- Load()
     source.data <- all.data$drug.response[which(all.data$drug.response$Compound == "TAE684"), ]
-    source.data
-    x <- source.data[["Primary.Cell.Line.Name"]][1:data$kMaxRows]
-    y <- source.data[["EC50..uM."]][1:data$kMaxRows]
+    x <- source.data[["Primary.Cell.Line.Name"]][1:kMaxRows]
+    y <- source.data[["EC50..uM."]][1:kMaxRows]
     usable <- complete.cases(x, y)
-    usable
     list(
-        fun = "plot",
+        graphing.function.name = "plot",
         args = list(
             x = x[usable],
             y = y[usable],
