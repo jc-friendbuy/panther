@@ -2,7 +2,8 @@ source('src/analysis/basic.R')
 
 visualization.list <- list(
   TAE684 = TAE684,
-  AEW541 = AEW541
+  AEW541 = AEW541,
+  Volcano = Volcano
 )
 
 GetVisualizationFunctionChoices <- function() {

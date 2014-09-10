@@ -22,18 +22,30 @@ TAE684 <- function() {
 AEW541 <- function() {
     all.data <- Load()
     source.data <- all.data$drug.response[which(all.data$drug.response$Compound == "AEW541"), ]
-    x <- source.data[["Primary.Cell.Line.Name"]][1:kMaxRows]
-    y <- source.data[["EC50..uM."]][1:kMaxRows]
-    usable <- complete.cases(x, y)
+    x <- source.data[["EC50..uM."]][1:kMaxRows]
+    usable <- complete.cases(x)
     list(
-        graphing.function.name = "plot",
+        graphing.function.name = "hist",
         args = list(
-            x = x[usable],
-            y = y[usable],
-            xlab = "Primary Cell Line",
-            ylab = "EC50 (uM)",
-            main = "EC50 by Primary Cell Line - Second vis",
+            x[usable],
+            xlab = "EC50 (uM)",
+            main = "EC50 by Primary Cell Line - Histogram",
             pch = 16
+        )
+    )
+}
+
+Volcano <- function() {
+    x <- 10*(1:nrow(volcano))
+    y <- 10*(1:ncol(volcano))
+    list(
+        graphing.function.name = "image",
+        args = list(
+            x,
+            y,
+            volcano,
+            col = terrain.colors(100),
+            main = "Volcano test"
         )
     )
 }
