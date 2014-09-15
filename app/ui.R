@@ -1,4 +1,5 @@
 library(shiny)
+library(shinyRGL)
 source('visualization_config.R')
 
 # Define UI for application that draws a histogram
@@ -15,7 +16,8 @@ shinyUI(fluidPage(
         ),
 
         mainPanel(
-            plotOutput("visualization")
+            plotOutput("visualization"),
+            webGLOutput("vis3d")
         )
     )
 ))
