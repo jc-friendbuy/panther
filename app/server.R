@@ -7,16 +7,16 @@ source('visualization_config.R')
 shinyServer(function(input, output) {
     # Compute the results of the requested visualization and determine
     # the appropriate render function so it can be displayed on the UI
-    # output$visualization <- renderPlot({
-    #     computed.visualization <- ExecuteVisualization(
-    #       input$visualization.select
-    #     )
-    #
-    #     do.call(
-    #       computed.visualization$graphing.function.name,
-    #       computed.visualization$args
-    #     )
-    # })
+    output$visualization <- renderPlot({
+        computed.visualization <- ExecuteVisualization(
+          input$visualization.select
+        )
+
+        do.call(
+          computed.visualization$graphing.function.name,
+          computed.visualization$args
+        )
+    })
 
     output$vis3d <- renderWebGL({
       # parameters:
