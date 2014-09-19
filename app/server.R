@@ -28,7 +28,7 @@ shinyServer(function(input, output) {
       x<-rnorm(n); y<-rnorm(n)
 
       # estimate non-parameteric density surface via kernel smoothing
-      denobj<-kde2d(x, y, n=ngrid)
+      denobj<-kde2d(x, y, n = ngrid)
       den.z <-denobj$z
 
       # generate parametric density surface of a bivariate normal distribution
