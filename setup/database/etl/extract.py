@@ -1,24 +1,8 @@
-kDataPath <- '/Users/jc/Projects/panther/data/'
+from setup.database.etl.common import data_readers as dr
 
-CopyNumber <- function () {
-  # Read the gene copy number data file
-  read.table(paste0(kDataPath, 'copynumber.txt'), header = T)
-}
+def load():
 
-DrugResponse <- function () {
-  # Read the drug response data file
-  read.csv(paste0(kDataPath, 'drug.csv'))
-}
-
-Expression <- function () {
-  # Read the gene mRNA expression data file
-  read.table(paste0(kDataPath, 'expression.gct'),
-             header = T, 
-             skip = 2,
-             skipNul = T)
-}
-
-LineData <- function () {
-  # Read the cancer cell line data file
-  read.table(paste0(kDataPath, 'lines.txt'), header = T)
-}
+    copy_number = dr.CopyNumberReader().read('copynumber.txt')
+    drug_response = dr.DrugResponseReader().read('drug.csv')
+    gene_expression = dr.GeneExpressionReader().read('expression.gct')
+    line_info = dr.CellLineInformationReader().read('lines.txt')
