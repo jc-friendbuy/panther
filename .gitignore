@@ -11,6 +11,7 @@
 # R data files from past sessions
 .Rdata
 .Rproj.user
+*.out
 
 # RStudio project files
 *.Rproj
