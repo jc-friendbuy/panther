@@ -1,4 +1,4 @@
-
+from contextlib import contextmanager
 from sqlalchemy import MetaData, Table
 from setup.database.etl.common.singleton import Singleton
 from setup.database.metadata.database_engine import DatabaseEngine
@@ -29,3 +29,16 @@ class CCLEDatabase(object):
 
     def _get_table(self, table_name):
         return Table(table_name, self._metadata, autoload=True)
+
+    @contextmanager
+    def begin(self):
+        connection = self._db_engine.engine.connect()
+        transaction = connection.begin()
+        try:
+            yield connection
+            transaction.commit()
+        except:
+            transaction.rollback()
+            raise
+        finally:
+            connection.close()
