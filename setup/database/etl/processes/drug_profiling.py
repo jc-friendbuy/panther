@@ -1,9 +1,10 @@
 from datetime import datetime
 from sqlalchemy import select
+from setup.database.etl.processes.processor import Processor
 from setup.database.metadata.database import CCLEDatabase
 
 
-class DrugProfilingProcess(object):
+class DrugProfilingProcessor(Processor):
 
     def __init__(self):
         self.drug_responses = CCLEDatabase().drug_responses

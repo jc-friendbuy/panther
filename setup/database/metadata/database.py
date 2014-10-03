@@ -24,6 +24,7 @@ class CCLEDatabase(object):
         self.genes = self._get_table('Genes')
         self.gene_copy_numbers = self._get_table('GeneCopyNumbers')
         self.gene_expressions = self._get_table('GeneExpressions')
+        self.gene_transcripts = self._get_table('GeneTranscripts')
         self.snp_arrays = self._get_table('SNPArrays')
         self.therapy_compounds = self._get_table('TherapyCompounds')
 

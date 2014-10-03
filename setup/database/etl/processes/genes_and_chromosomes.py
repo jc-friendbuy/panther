@@ -1,9 +1,10 @@
 from sqlalchemy import select
 from setup.database.etl.data_sources.copy_number import CopyNumberDataSource
+from setup.database.etl.processes.processor import Processor
 from setup.database.metadata.database import CCLEDatabase
 
 
-class GeneAndChromosomeProcess(object):
+class GeneAndChromosomeProcessor(Processor):
 
     def __init__(self):
         self.chromosomes = CCLEDatabase().chromosomes
@@ -11,31 +12,33 @@ class GeneAndChromosomeProcess(object):
 
     def run(self):
         copy_number_data = CopyNumberDataSource().data
-        for row in copy_number_data.iterrows():
-            chromosome = row[2]
-            chromosome_id = self._insert_chromosome_from_name_if_not_present_and_get_id(chromosome)
+        for row_number, row in copy_number_data.iterrows():
+            self.process_row(row)
 
-            egid = row[0]
-            symbol = row[1]
-            loc_start = row[3]
-            loc_end = row[4]
+    def process_row(self, row):
+        chromosome = row['CHR']
+        chromosome_id = self._insert_chromosome_from_name_if_not_present_and_get_id(chromosome)
 
-            self._insert_gene_if_not_present(egid, symbol, loc_start, loc_end, chromosome_id)
+        egid = row['EGID']
+        symbol = row['SYMBOL']
+        loc_start = row['CHRLOC']
+        loc_end = row['CHRLOCEND']
+
+        self._insert_gene_if_not_present(egid, symbol, loc_start, loc_end, chromosome_id)
 
     def _insert_chromosome_from_name_if_not_present_and_get_id(self, chromosome_name):
         stored_chromosome = self._get_chromosome_from_name(chromosome_name)
 
         if not stored_chromosome:
             with CCLEDatabase().begin() as connection:
-                chromosome_id = connection.execute(
+                connection.execute(
                     self.chromosomes.insert().values(
                         name=chromosome_name,
-                    ).returning(self.chromosomes.idChromosome)
+                    )
                 )
-        else:
-            chromosome_id = stored_chromosome[self.chromosomes.c.idChromosome]
+            stored_chromosome = self._get_chromosome_from_name(chromosome_name)
 
-        return chromosome_id
+        return stored_chromosome[self.chromosomes.c.idChromosome]
 
     def _get_chromosome_from_name(self, chromosome_name):
         with CCLEDatabase().begin() as connection:

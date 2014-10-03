@@ -1,15 +1,16 @@
 from datetime import datetime
 from sqlalchemy import select
+from setup.database.etl.processes.processor import Processor
 from setup.database.metadata.database import CCLEDatabase
 
 
-class DataSetProcess(object):
+class DataSetProcessor(Processor):
 
     def __init__(self):
         self.data_sets = CCLEDatabase().data_sets
 
     def run(self, data_set_datetime=None, description=None):
-        return self.get_dataset_id(
+        return self._get_dataset_id(
             self._insert_dataset_if_not_present_and_return_current_dataset(
                 data_set_datetime=data_set_datetime,
                 description=description
@@ -29,11 +30,10 @@ class DataSetProcess(object):
                 return existing_data_set
             else:
                 with CCLEDatabase().begin() as connection:
-
                     connection.execute(
                         CCLEDatabase().data_sets.insert().values(
-                            Date=data_set_datetime,
-                            Description=description
+                            date=data_set_datetime,
+                            description=description
                         )
                     )
 
@@ -41,12 +41,10 @@ class DataSetProcess(object):
 
     def _get_dataset_for_date(self, date):
         with CCLEDatabase().begin() as connection:
-
             existing_data_set = connection.execute(
-                select([self.data_sets]).where(self.data_sets.c.Date == date)
+                select([self.data_sets]).where(self.data_sets.c.date == date)
             ).first()
-
             return existing_data_set
 
-    def get_dataset_id(self, dataset):
+    def _get_dataset_id(self, dataset):
         return dataset[self.data_sets.c.idDataSet]
