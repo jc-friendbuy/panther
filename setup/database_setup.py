@@ -1,4 +1,4 @@
-from setup.database.etl.processes import main
+from setup.database.etl.processors import main
 
 if __name__ == '__main__':
-    main.CCLEETLProcessor().run()
+    main.CCLEETLProcessor().load()

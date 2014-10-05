@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy import select
-from setup.database.etl.processes.processor import Processor
+from setup.database.etl.processors.processor import Processor
 from setup.database.metadata.database import CCLEDatabase
 
 
@@ -11,7 +11,7 @@ class DrugProfilingProcessor(Processor):
         self.drug_response_doses = CCLEDatabase().drug_response_doses
         self.therapy_compounds = CCLEDatabase().therapy_compounds
 
-    def run(self, data_set_id):
+    def load(self, data_set_id):
         # self._copy_number = copy_number.CopyNumberDataSource()
         # self._copy_number.data
         # self._drug_response = drug_response.DrugResponseDataSource()

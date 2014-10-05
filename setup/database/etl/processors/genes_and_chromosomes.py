@@ -1,21 +1,22 @@
 from sqlalchemy import select
 from setup.database.etl.data_sources.copy_number import CopyNumberDataSource
-from setup.database.etl.processes.processor import Processor
+from setup.database.etl.processors.processor import Processor
 from setup.database.metadata.database import CCLEDatabase
 
 
 class GeneAndChromosomeProcessor(Processor):
 
     def __init__(self):
+        super(self.__class__, self).__init__([CopyNumberDataSource])
         self.chromosomes = CCLEDatabase().chromosomes
         self.genes = CCLEDatabase().genes
 
-    def run(self):
-        copy_number_data = CopyNumberDataSource().data
-        for row_number, row in copy_number_data.iterrows():
-            self.process_row(row)
+    def load(self, dataset_id):
+        self._extract_data_from_source_if_not_already_loaded(CopyNumberDataSource)
+        for row_number, row in self._data[CopyNumberDataSource].iterrows():
+            self._load_chromosome_and_gene(row)
 
-    def process_row(self, row):
+    def _load_chromosome_and_gene(self, row):
         chromosome = row['CHR']
         chromosome_id = self._insert_chromosome_from_name_if_not_present_and_get_id(chromosome)
 

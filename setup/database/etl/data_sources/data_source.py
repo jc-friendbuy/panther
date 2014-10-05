@@ -1,10 +1,11 @@
 import os
 import pandas
 
+
+# TODO(jccoto): Improvement: extract rows from the datasource so that null values are properly handled
 class DataSource(object):
 
-    def __init__(self, data_file, read_options=None,
-                    data_home_path='~/Projects/panther/data/'):
+    def __init__(self, data_file, read_options=None, data_home_path='~/Projects/panther/data/'):
         self._data = None
         self._data_file = data_file
         self._data_home_dir = data_home_path
