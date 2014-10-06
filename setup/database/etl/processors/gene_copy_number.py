@@ -80,3 +80,8 @@ class GeneCopyNumberETLProcessor(ETLProcessor):
             return self._get_id_by_column_values(self.genes, {
                 self.genes.c.egid: egid}
             )
+
+        def get_gene_id_from_symbol(self, symbol):
+            return self._get_id_by_column_values(self.genes, {
+                self.genes.c.symbol: symbol}
+            )

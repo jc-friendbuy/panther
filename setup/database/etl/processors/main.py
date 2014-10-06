@@ -1,6 +1,6 @@
 from datetime import datetime
-from setup.database.etl.processors.cell_lines import CellLineETLProcessor
 
+from setup.database.etl.processors.cell_lines import CellLineETLProcessor
 from setup.database.etl.processors.data_set import DataSetETLProcessor
 from setup.database.etl.processors.gene_copy_number import GeneCopyNumberETLProcessor
 from setup.database.etl.processors.etl_processor import ETLProcessor

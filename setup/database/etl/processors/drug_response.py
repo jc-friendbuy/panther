@@ -1,4 +1,5 @@
 import traceback
+
 from setup.database.etl.data_sources.drug_information import DrugInformationDataSource
 from setup.database.etl.data_sources.drug_response import DrugResponseDataSource
 from setup.database.etl.processors.etl_processor import ETLProcessor
@@ -106,23 +107,19 @@ class DrugResponseETLProcessor(ETLProcessor):
         single_activity_sd = activity_sd.split(',')
 
         for index in xrange(0, len(single_doses)):
-            try:
-                single_dose = float(single_doses[index])
-                single_ad = float(single_activity_data[index])
-                single_sd = float(single_activity_sd[index])
+            single_dose = float(single_doses[index])
+            single_ad = float(single_activity_data[index])
+            single_sd = float(single_activity_sd[index])
 
-                self._insert_or_update_table_in_current_dataset_with_values_based_on_where_columns(
-                    rd, {
-                        rd.c.doseUM: single_dose,
-                        rd.c.activityMedian: single_ad,
-                        rd.c.activitySD: single_sd,
-                        rd.c.DrugResponses_idDrugResponse: drug_response_id
-                    },
-                    [rd.c.DrugResponses_idDrugResponse, rd.c.doseUM]
-                )
-
-            except:
-                print traceback.format_exc()
+            self._insert_or_update_table_in_current_dataset_with_values_based_on_where_columns(
+                rd, {
+                    rd.c.doseUM: single_dose,
+                    rd.c.activityMedian: single_ad,
+                    rd.c.activitySD: single_sd,
+                    rd.c.DrugResponses_idDrugResponse: drug_response_id
+                },
+                [rd.c.DrugResponses_idDrugResponse, rd.c.doseUM]
+            )
 
     def _get_drug_response_id_from_cancer_cell_line_id_and_therapy_compound_id(
             self, cancer_cell_line_id, therapy_compound_id):
