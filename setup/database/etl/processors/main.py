@@ -3,7 +3,7 @@ from setup.database.etl.processors.cell_lines import CellLineETLProcessor
 
 from setup.database.etl.processors.data_set import DataSetETLProcessor
 from setup.database.etl.processors.gene_copy_number import GeneCopyNumberETLProcessor
-from setup.database.etl.processors.etlprocessor import ETLProcessor
+from setup.database.etl.processors.etl_processor import ETLProcessor
 
 
 class CancerCellLineEncyclopediaETLETLProcessor(ETLProcessor):
@@ -18,5 +18,3 @@ class CancerCellLineEncyclopediaETLETLProcessor(ETLProcessor):
         cell_line_processor.load()
         copy_number_processor = GeneCopyNumberETLProcessor(current_data_set, cell_line_processor)
         copy_number_processor.load()
-
-        # GeneAndChromosomeProcess().run()

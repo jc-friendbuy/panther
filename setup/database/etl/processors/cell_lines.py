@@ -1,5 +1,5 @@
 from setup.database.etl.data_sources.line_information import LineInformationDataSource
-from setup.database.etl.processors.etlprocessor import ETLProcessor
+from setup.database.etl.processors.etl_processor import ETLProcessor
 from setup.database.metadata.database import CCLEDatabase
 
 
@@ -33,7 +33,7 @@ class CellLineETLProcessor(ETLProcessor):
 
     def _get_expression_array_id_from_name(self, name):
         table = self.expression_arrays
-        return self._get_primary_key_by_column_values(table, {table.c.name: name})
+        return self._get_id_by_column_values(table, {table.c.name: name})
 
     def _load_snp_array(self, row):
         snp_array_name = self._get_value_or_none_if_equals_null(row['SNP arrays'])
@@ -47,7 +47,7 @@ class CellLineETLProcessor(ETLProcessor):
 
     def _get_snp_array_id_from_name(self, name):
         table = self.snp_arrays
-        return self._get_primary_key_by_column_values(table, {table.c.name: name})
+        return self._get_id_by_column_values(table, {table.c.name: name})
 
     def _load_cell_line_site(self, row):
         site_name = self._get_value_or_none_if_equals_null(row['Site Primary'])
@@ -61,7 +61,7 @@ class CellLineETLProcessor(ETLProcessor):
 
     def _get_site_id_by_name(self, name):
         table = self.cell_line_sites
-        return self._get_primary_key_by_column_values(table, {table.c.name: name})
+        return self._get_id_by_column_values(table, {table.c.name: name})
 
     def _load_cell_line_source(self, row):
         source_name = self._get_value_or_none_if_equals_null(row['Source'])
@@ -74,7 +74,7 @@ class CellLineETLProcessor(ETLProcessor):
 
     def _get_source_id_by_name(self, name):
         table = self.cell_line_sources
-        return self._get_primary_key_by_column_values(table, {table.c.name: name})
+        return self._get_id_by_column_values(table, {table.c.name: name})
 
     def _load_cancer_cell_line(self, row):
         ccle_name = self._get_value_or_none_if_equals_null(row['CCLE name'])
@@ -114,4 +114,4 @@ class CellLineETLProcessor(ETLProcessor):
 
     def get_cancer_cell_line_id_by_name(self, name):
         table = self.cancer_cell_lines
-        return self._get_primary_key_by_column_values(table, {table.c.ccleName: name})
+        return self._get_id_by_column_values(table, {table.c.ccleName: name})

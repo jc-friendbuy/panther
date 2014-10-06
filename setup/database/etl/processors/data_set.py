@@ -1,6 +1,6 @@
 from sqlalchemy import select
 
-from setup.database.etl.processors.etlprocessor import ETLProcessor
+from setup.database.etl.processors.etl_processor import ETLProcessor
 from setup.database.metadata.database import CCLEDatabase
 
 

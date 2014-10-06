@@ -1,5 +1,5 @@
 from setup.database.etl.data_sources.copy_number import CopyNumberDataSource
-from setup.database.etl.processors.etlprocessor import ETLProcessor
+from setup.database.etl.processors.etl_processor import ETLProcessor
 from setup.database.metadata.database import CCLEDatabase
 
 
@@ -52,7 +52,7 @@ class GeneCopyNumberETLProcessor(ETLProcessor):
             )
 
         def _get_chromosome_id_from_name(self, chromosome_name):
-            return self._get_primary_key_by_column_values(self.chromosomes, {
+            return self._get_id_by_column_values(self.chromosomes, {
                 self.chromosomes.c.name: chromosome_name}
             )
 
@@ -77,6 +77,6 @@ class GeneCopyNumberETLProcessor(ETLProcessor):
                 )
 
         def _get_gene_id_from_egid(self, egid):
-            return self._get_primary_key_by_column_values(self.genes, {
+            return self._get_id_by_column_values(self.genes, {
                 self.genes.c.egid: egid}
             )

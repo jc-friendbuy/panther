@@ -30,7 +30,7 @@ class ETLProcessor(object):
     def load(self, *args, **kwargs):
         pass
 
-    def _get_primary_key_by_column_values(self, table, column_values):
+    def _get_id_by_column_values(self, table, column_values):
         primary_key_columns = [pk_col for pk_col in table.primary_key]
         select_stmt = select(primary_key_columns)
         for col, value in column_values.iteritems():
@@ -63,7 +63,7 @@ class ETLProcessor(object):
 
             with CCLEDatabase().begin() as connection:
                 matching_ids = connection.execute(
-                    self._attach_where_clause_for_current_dataset_to_statement(select_stmt)
+                    self._attach_where_clause_for_current_dataset_to_statement(table, select_stmt)
                 )
 
                 base_update = table.update().values(values_by_column)
