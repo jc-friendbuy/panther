@@ -1,8 +1,9 @@
 from sqlalchemy import select
+
 from setup.database.metadata.database import CCLEDatabase
 
 
-class Processor(object):
+class ETLProcessor(object):
 
     # NOTE: null_value is hackish.  This should be done through the data source, which should return a row object and
     #  automatically determine which values are None based on knowledge of the data.
@@ -29,7 +30,7 @@ class Processor(object):
     def load(self, *args, **kwargs):
         pass
 
-    def _get_primary_key_by_column_values(self, table, **column_values):
+    def _get_primary_key_by_column_values(self, table, column_values):
         primary_key_columns = [pk_col for pk_col in table.primary_key]
         select_stmt = select(primary_key_columns)
         for col, value in column_values.iteritems():
@@ -37,7 +38,7 @@ class Processor(object):
 
         with CCLEDatabase().begin() as connection:
             return connection.execute(
-                self._attach_where_clause_for_dataset_to_statement(
+                self._attach_where_clause_for_current_dataset_to_statement(
                     table,
                     select_stmt
                 )
@@ -48,29 +49,37 @@ class Processor(object):
             return None
         return value
 
-    def _insert_or_update_table_for_dataset_with_values_based_on_where_columns(self, table, values_by_column,
-                                                                               where_columns):
+    def _insert_or_update_table_in_current_dataset_with_values_based_on_where_columns(
+            self, table, values_by_column, where_columns=None):
 
-        select_stmt = select([pk_col for pk_col in table.primary_key])
-        for column in where_columns:
-            select_stmt = select_stmt.where(column == values_by_column[column])
+        if not where_columns:
+            where_columns = list()
 
-        row_count = 0
-        with CCLEDatabase().begin() as connection:
-            matching_ids = connection.execute(select_stmt.where(table.c.DataSet_idDataSet == self._dataset_id))
-            base_update = table.update().values(values_by_column)
-            for row in self._iterate_through_result_set(matching_ids):
-                row_count += 1
-                keyed_update = base_update
-                for primary_key in table.primary_key:
-                    keyed_update = keyed_update.where(primary_key == row[primary_key])
-                connection.execute(keyed_update)
+        updated_rows = 0
+        if len(where_columns) > 0:
+            select_stmt = select([pk_col for pk_col in table.primary_key])
+            for column in where_columns:
+                select_stmt = select_stmt.where(column == values_by_column[column])
 
-        if not row_count:
-            values_by_column.update({'DataSet_idDataSet': self._dataset_id})
-            connection.execute(table.insert().values(values_by_column))
+            with CCLEDatabase().begin() as connection:
+                matching_ids = connection.execute(
+                    self._attach_where_clause_for_current_dataset_to_statement(select_stmt)
+                )
 
-    def _attach_where_clause_for_dataset_to_statement(self, table, statement):
+                base_update = table.update().values(values_by_column)
+                for row in self._iterate_through_result_set(matching_ids):
+                    updated_rows += 1
+                    keyed_update = base_update
+                    for primary_key in table.primary_key:
+                        keyed_update = keyed_update.where(primary_key == row[primary_key])
+                    connection.execute(keyed_update)
+
+        if updated_rows > 0:
+            with CCLEDatabase().begin() as connection:
+                values_by_column.update({'DataSet_idDataSet': self._dataset_id})
+                connection.execute(table.insert().values(values_by_column))
+
+    def _attach_where_clause_for_current_dataset_to_statement(self, table, statement):
         return statement.where(table.c.DataSet_idDataSet == self._dataset_id)
 
     @classmethod

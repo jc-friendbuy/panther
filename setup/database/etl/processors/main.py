@@ -1,14 +1,22 @@
 from datetime import datetime
-from setup.database.etl.processors.data_set import DataSetProcessor
-from setup.database.etl.processors.processor import Processor
+from setup.database.etl.processors.cell_lines import CellLineETLProcessor
+
+from setup.database.etl.processors.data_set import DataSetETLProcessor
+from setup.database.etl.processors.gene_copy_number import GeneCopyNumberETLProcessor
+from setup.database.etl.processors.etlprocessor import ETLProcessor
 
 
-class CCLEETLProcessor(Processor):
+class CancerCellLineEncyclopediaETLETLProcessor(ETLProcessor):
 
     def load(self):
         dataset_date = datetime(2014, 9, 30)
         dataset_description = 'This is the default dataset created for this version of the data.'
-        dataset_processor = DataSetProcessor()
+        dataset_processor = DataSetETLProcessor()
         dataset_processor.load(dataset_date, dataset_description)
-        current_data_set = dataset_processor.get_dataset_for_date(dataset_date)
+        current_data_set = dataset_processor.get_dataset_id_for_date_and_description(dataset_date, dataset_description)
+        cell_line_processor = CellLineETLProcessor(current_data_set)
+        cell_line_processor.load()
+        copy_number_processor = GeneCopyNumberETLProcessor(current_data_set, cell_line_processor)
+        copy_number_processor.load()
+
         # GeneAndChromosomeProcess().run()

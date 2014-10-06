@@ -22,6 +22,6 @@ class DataSource(object):
 
     @property
     def data(self):
-        if not self._data:
+        if self._data is None:
             self._read()
         return self._data

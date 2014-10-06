@@ -1,9 +1,9 @@
 from setup.database.etl.data_sources.line_information import LineInformationDataSource
-from setup.database.etl.processors.processor import Processor
+from setup.database.etl.processors.etlprocessor import ETLProcessor
 from setup.database.metadata.database import CCLEDatabase
 
 
-class CellLineProcessor(Processor):
+class CellLineETLProcessor(ETLProcessor):
 
     def __init__(self, dataset_id):
         super(self.__class__, self).__init__(dataset_id, [LineInformationDataSource], null_value='NULL')
@@ -25,7 +25,7 @@ class CellLineProcessor(Processor):
         expression_array_name = self._get_value_or_none_if_equals_null(row['Expression arrays'])
 
         table = self.expression_arrays
-        self._insert_or_update_table_for_dataset_with_values_based_on_where_columns(
+        self._insert_or_update_table_in_current_dataset_with_values_based_on_where_columns(
             table,
             {table.c.name: expression_array_name},
             [table.c.name]
@@ -39,7 +39,7 @@ class CellLineProcessor(Processor):
         snp_array_name = self._get_value_or_none_if_equals_null(row['SNP arrays'])
 
         table = self.snp_arrays
-        self._insert_or_update_table_for_dataset_with_values_based_on_where_columns(
+        self._insert_or_update_table_in_current_dataset_with_values_based_on_where_columns(
             table,
             {table.c.name: snp_array_name},
             [table.c.name]
@@ -53,7 +53,7 @@ class CellLineProcessor(Processor):
         site_name = self._get_value_or_none_if_equals_null(row['Site Primary'])
 
         table = self.cell_line_sites
-        self._insert_or_update_table_for_dataset_with_values_based_on_where_columns(
+        self._insert_or_update_table_in_current_dataset_with_values_based_on_where_columns(
             table,
             {table.c.name: site_name},
             [table.c.name]
@@ -66,7 +66,7 @@ class CellLineProcessor(Processor):
     def _load_cell_line_source(self, row):
         source_name = self._get_value_or_none_if_equals_null(row['Source'])
 
-        self._insert_or_update_table_for_dataset_with_values_based_on_where_columns(
+        self._insert_or_update_table_in_current_dataset_with_values_based_on_where_columns(
             self.cell_line_sources,
             {self.cell_line_sources.c.name: source_name},
             [self.cell_line_sources.c.name]
@@ -76,7 +76,7 @@ class CellLineProcessor(Processor):
         table = self.cell_line_sources
         return self._get_primary_key_by_column_values(table, {table.c.name: name})
 
-    def _load_cancer_cell_line(self, row, dataset_id):
+    def _load_cancer_cell_line(self, row):
         ccle_name = self._get_value_or_none_if_equals_null(row['CCLE name'])
         primary_name = self._get_value_or_none_if_equals_null(row['Cell line primary name'])
         aliases = self._get_value_or_none_if_equals_null(row['Cell line aliases'])
@@ -93,7 +93,7 @@ class CellLineProcessor(Processor):
 
         table = self.cancer_cell_lines
 
-        self._insert_or_update_table_for_dataset_with_values_based_on_where_columns(
+        self._insert_or_update_table_in_current_dataset_with_values_based_on_where_columns(
             self.cancer_cell_lines, {
                 table.c.ccleName: ccle_name,
                 table.c.primaryName: primary_name,
@@ -112,6 +112,6 @@ class CellLineProcessor(Processor):
             [table.c.ccleName]
         )
 
-    def _get_cancer_cell_line_id_by_name(self, name):
-        table = self.cell_line_sites
+    def get_cancer_cell_line_id_by_name(self, name):
+        table = self.cancer_cell_lines
         return self._get_primary_key_by_column_values(table, {table.c.ccleName: name})
