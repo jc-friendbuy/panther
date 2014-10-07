@@ -13,15 +13,20 @@ class CancerCellLineEncyclopediaETLETLProcessor(ETLProcessor):
         dataset_date = datetime(2014, 9, 30)
         dataset_description = 'This is the default dataset created for this version of the data.'
         dataset_processor = DataSetETLProcessor()
+        print('Loading DataSet....')
         dataset_processor.load(dataset_date, dataset_description)
         current_dataset_id = dataset_processor.get_dataset_id_for_date_and_description(
             dataset_date, dataset_description
         )
         cell_line_processor = CellLineETLProcessor(current_dataset_id)
+        print('Loading Cell Lines....')
         cell_line_processor.load()
         copy_number_processor = GeneCopyNumberETLProcessor(current_dataset_id, cell_line_processor)
+        print('Loading Copy Number....')
         copy_number_processor.load()
         gene_expression_processor = GeneExpressionETLProcessor(
             current_dataset_id, cell_line_processor, copy_number_processor
         )
+        print('Loading Gene Expression....')
         gene_expression_processor.load()
+        print('Done')

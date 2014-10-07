@@ -12,7 +12,6 @@ class GeneExpressionETLProcessor(ETLProcessor):
             dataset_id, [GeneExpressionDataSource])
         self.gene_expression = CCLEDatabase().gene_expressions
         self.gene_transcripts = CCLEDatabase().gene_transcripts
-        self.genes = CCLEDatabase().genes
 
         self._cancer_cell_line_etl_processor = cancer_cell_line_etl_processor
         self._gene_copy_number_etl_processor = gene_copy_number_etl_processor
@@ -22,6 +21,8 @@ class GeneExpressionETLProcessor(ETLProcessor):
 
     def _load_gene_expressions(self):
         for row_number, row in self.extract(GeneExpressionDataSource).iterrows():
+            if row_number == 5:
+                break
             self._load_gene_transcript(row)
             self._load_gene_expression(row)
 
@@ -37,7 +38,7 @@ class GeneExpressionETLProcessor(ETLProcessor):
                 t.c.probeId: probe_id,
                 t.c.Genes_idGene: matching_gene_id,
             },
-            [t.c.name]
+            [t.c.probeId]
         )
 
     #TODO
@@ -72,5 +73,5 @@ class GeneExpressionETLProcessor(ETLProcessor):
 
     def _get_transcript_id_from_probe_id(self, probe_id):
         return self._get_id_by_column_values(self.gene_transcripts, {
-            self.genes.c.probeId: probe_id}
+            self.gene_transcripts.c.probeId: probe_id}
         )

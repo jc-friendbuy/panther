@@ -15,6 +15,8 @@ class GeneCopyNumberETLProcessor(ETLProcessor):
 
         def load(self):
             for row_number, row in self.extract(CopyNumberDataSource).iterrows():
+                if row_number == 5:
+                    break
                 self._load_chromosome(row)
                 self._load_gene(row)
                 self._load_gene_copy_number(row)
