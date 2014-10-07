@@ -77,7 +77,7 @@ class DrugResponseETLProcessor(ETLProcessor):
                 r.c.TherapyCompounds_idTherapyCompound: therapy_compound_id,
             },
             [r.c.CancerCellLines_idCancerCellLine, r.c.TherapyCompounds_idTherapyCompound]
-        )
+            )
 
         self._load_drug_response_doses(row)
 
