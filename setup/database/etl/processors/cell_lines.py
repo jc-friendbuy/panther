@@ -1,3 +1,5 @@
+from sqlalchemy import select
+
 from setup.database.etl.data_sources.line_information import LineInformationDataSource
 from setup.database.etl.processors.etl_processor import ETLProcessor
 from setup.database.metadata.database import CCLEDatabase
@@ -126,3 +128,27 @@ class CellLineETLProcessor(ETLProcessor):
             },
             [self.cancer_cell_lines.c.ccleName]
         )
+
+    def get_all_cancer_cell_line_names_for_site_name(self, site_name):
+        cl = self.cancer_cell_lines
+        s = self.cell_line_sites
+
+        ccle_name_list = list()
+        with CCLEDatabase().begin() as connection:
+            query = select([cl.c.ccleName]).distinct() \
+                .where(s.c.name == site_name) \
+                .where(cl.c.CellLineSites_idCellLineSite == s.c.idCellLineSite)
+
+            for table in [cl, s]:
+                query = self._attach_where_clause_for_current_dataset_to_statement(table, query)
+
+            for row in self._iterate_through_result_set(connection.execute(query)):
+                ccle_name_list.append(row[cl.c.ccleName])
+
+        for remove_line in ['MB157_BREAST']:
+            try:
+                ccle_name_list.remove(remove_line)
+            except:
+                pass
+
+        return ccle_name_list

@@ -1,4 +1,6 @@
+import inspect
 import math
+
 from sqlalchemy import select
 
 from setup.database.metadata.database import CCLEDatabase
@@ -16,9 +18,13 @@ class ETLProcessor(object):
         self._null_value = null_value
         data_source_classes = list() if data_source_classes is None else data_source_classes
 
-        for data_source_class in data_source_classes:
-            data_source = data_source_class()
-            self._data_sources[data_source_class] = data_source
+        for data_source_description in data_source_classes:
+            if inspect.isclass(data_source_description):
+                data_source = data_source_description()
+                self._data_sources[data_source_description] = data_source
+            else:
+                data_source = data_source_description
+                self._data_sources[data_source_description.__class__] = data_source
 
     def extract(self, data_source_class):
         self._extract_data_from_source_if_not_already_loaded(data_source_class)

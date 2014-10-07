@@ -1,5 +1,3 @@
-import traceback
-
 from setup.database.etl.data_sources.drug_information import DrugInformationDataSource
 from setup.database.etl.data_sources.drug_response import DrugResponseDataSource
 from setup.database.etl.processors.etl_processor import ETLProcessor
