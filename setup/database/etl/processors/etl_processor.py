@@ -1,3 +1,4 @@
+import math
 from sqlalchemy import select
 
 from setup.database.metadata.database import CCLEDatabase
@@ -45,6 +46,11 @@ class ETLProcessor(object):
             ).scalar()
 
     def _get_value_or_none_if_equals_null(self, value):
+        try:
+            if math.isnan(value):
+                return None
+        except TypeError:
+            pass
         if value == self._null_value:
             return None
         return value
@@ -74,13 +80,16 @@ class ETLProcessor(object):
                         keyed_update = keyed_update.where(primary_key == row[primary_key])
                     connection.execute(keyed_update)
 
-        if updated_rows > 0:
+        if updated_rows == 0:
             with CCLEDatabase().begin() as connection:
-                values_by_column.update({'DataSet_idDataSet': self._dataset_id})
+                if getattr(table.c, 'DataSets_idDataSet', None) is not None:
+                    values_by_column.update({'DataSets_idDataSet': self._dataset_id})
                 connection.execute(table.insert().values(values_by_column))
 
     def _attach_where_clause_for_current_dataset_to_statement(self, table, statement):
-        return statement.where(table.c.DataSet_idDataSet == self._dataset_id)
+        if getattr(table.c, 'DataSets_idDataSet', None) is not None:
+            statement = statement.where(table.c.DataSets_idDataSet == self._dataset_id)
+        return statement
 
     @classmethod
     def _iterate_through_result_set(cls, result_set):

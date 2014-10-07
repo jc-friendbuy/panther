@@ -55,6 +55,11 @@ class GeneExpressionETLProcessor(ETLProcessor):
 
         for cell_line_name in cell_line_column_values:
             ccle_line_id = self._cancer_cell_line_etl_processor.get_cancer_cell_line_id_by_name(cell_line_name)
+
+            if ccle_line_id is None:
+                self._cancer_cell_line_etl_processor.add_cancer_cell_line_with_name(cell_line_name)
+                ccle_line_id = self._cancer_cell_line_etl_processor.get_cancer_cell_line_id_by_name(cell_line_name)
+
             rma_normalized_expression = self._get_value_or_none_if_equals_null(row[cell_line_name])
             self._insert_or_update_table_in_current_dataset_with_values_based_on_where_columns(
                 ex, {

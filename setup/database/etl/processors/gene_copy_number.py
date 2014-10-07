@@ -11,7 +11,7 @@ class GeneCopyNumberETLProcessor(ETLProcessor):
             self.gene_copy_numbers = CCLEDatabase().gene_copy_numbers
             self.genes = CCLEDatabase().genes
 
-            self._cell_line_processor = cell_line_processor
+            self._cancer_cell_line_etl_processor = cell_line_processor
 
         def load(self):
             for row_number, row in self.extract(CopyNumberDataSource).iterrows():
@@ -64,7 +64,14 @@ class GeneCopyNumberETLProcessor(ETLProcessor):
             # TODO: This should be done in the data source
             cell_line_column_values = list(self._data[CopyNumberDataSource].columns.values)[5:]
             for cell_line_name in cell_line_column_values:
-                cancer_cell_line_id = self._cell_line_processor.get_cancer_cell_line_id_by_name(cell_line_name)
+                cancer_cell_line_id = \
+                    self._cancer_cell_line_etl_processor.get_cancer_cell_line_id_by_name(cell_line_name)
+
+                if cancer_cell_line_id is None:
+                    self._cancer_cell_line_etl_processor.add_cancer_cell_line_with_name(cell_line_name)
+                    cancer_cell_line_id = \
+                        self._cancer_cell_line_etl_processor.get_cancer_cell_line_id_by_name(cell_line_name)
+
                 snp_copy_number_value = row[cell_line_name]
 
                 self._insert_or_update_table_in_current_dataset_with_values_based_on_where_columns(
