@@ -1,3 +1,4 @@
+from decimal import Decimal
 from setup.database.etl.data_sources.drug_information import DrugInformationDataSource
 from setup.database.etl.data_sources.drug_response import DrugResponseDataSource
 from setup.database.etl.processors.etl_processor import ETLProcessor
@@ -60,8 +61,12 @@ class DrugResponseETLProcessor(ETLProcessor):
         compound_name = self._get_value_or_none_if_equals_null(row['Compound'])
         therapy_compound_id = self._get_compound_id_by_name(compound_name)
 
+        if therapy_compound_id is None:
+            self._add_therapy_compound_with_name(compound_name)
+            therapy_compound_id = self._get_compound_id_by_name(compound_name)
+
         fit_type = self._get_value_or_none_if_equals_null(row['FitType'])
-        ec50_um = self._get_value_or_none_if_equals_null(row['EC50 (uM)'])
+        ec50_um = self._get_value_or_none_if_equals_null(row['EC50 (uM)']) or -1
         ic50_um = self._get_value_or_none_if_equals_null(row['IC50 (uM)'])
         a_max = self._get_value_or_none_if_equals_null(row['Amax'])
         act_area = self._get_value_or_none_if_equals_null(row['ActArea'])
@@ -77,9 +82,17 @@ class DrugResponseETLProcessor(ETLProcessor):
                 r.c.TherapyCompounds_idTherapyCompound: therapy_compound_id,
             },
             [r.c.CancerCellLines_idCancerCellLine, r.c.TherapyCompounds_idTherapyCompound]
-            )
+        )
 
         self._load_drug_response_doses(row)
+
+    def _add_therapy_compound_with_name(self, name):
+        self._insert_or_update_table_in_current_dataset_with_values_based_on_where_columns(
+            self.therapy_compounds, {
+                self.therapy_compounds.c.name: name,
+            },
+            [self.therapy_compounds.c.name]
+        )
 
     def _get_compound_id_by_name(self, name):
         table = self.therapy_compounds
@@ -105,9 +118,9 @@ class DrugResponseETLProcessor(ETLProcessor):
         single_activity_sd = activity_sd.split(',')
 
         for index in xrange(0, len(single_doses)):
-            single_dose = float(single_doses[index])
-            single_ad = float(single_activity_data[index])
-            single_sd = float(single_activity_sd[index])
+            single_dose = Decimal(single_doses[index])
+            single_ad = Decimal(single_activity_data[index])
+            single_sd = Decimal(single_activity_sd[index])
 
             self._insert_or_update_table_in_current_dataset_with_values_based_on_where_columns(
                 rd, {

@@ -83,8 +83,6 @@ class BreastSpecificGeneExpressionETLProcessor(GeneExpressionETLProcessor):
 
     def load(self):
         for row_number, row in self.extract(LineSubsetGeneExpressionDataSource).iterrows():
-            if row_number == 5:
-                break
             self._load_gene_transcript(row)
             self._load_gene_expression(row)
 

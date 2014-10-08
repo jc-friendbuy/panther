@@ -112,8 +112,6 @@ class BreastSpecificGeneCopyNumberETLProcessor(GeneCopyNumberETLProcessor):
 
     def load(self):
         for row_number, row in self.extract(LineSubsetGeneCopyNumberDataSource).iterrows():
-            if row_number == 5:
-                break
             self._load_chromosome(row)
             self._load_gene(row)
             self._load_gene_copy_number(row)
