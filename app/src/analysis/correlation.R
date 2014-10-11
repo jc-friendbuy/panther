@@ -1,4 +1,5 @@
 source('src/data/db.R')
+library(shiny)
 
 # CorrelationHistogram <- function() {
 #   all.data <- GetAll()
@@ -33,16 +34,38 @@ CorrelationsByGene <- function() {
 
 CorrelationHistogram <- function() {
   correlations.by.gene <- CorrelationsByGene()
-  
   list(
-    graphing.function.name = "hist",
-    args = list(
-      x = unlist(correlations.by.gene),
-      xlab = "Correlation",
-      ylab = "Frequency",
-      main = "Copy Number, Expression Correlation"
+    list(
+      graph.type = "hist",
+      visualization = function() {
+        hist(x = unlist(correlations.by.gene),
+             xlab = "Correlation",
+             ylab = "Frequency",
+             main = "Copy Number, Expression Correlation")
+      }
+    ),
+    list(
+      graph.type = "plot",
+      visualization = function() {
+        plot(x = unlist(correlations.by.gene),
+             xlab = "Gene",
+             ylab = "Correlation",
+             main = "Correlations")
+      }
     )
   )
+  
+#   list(
+#     list(
+#       graphing.function.name = "hist",
+#       args = list(
+#         x = unlist(correlations.by.gene),
+#         xlab = "Correlation",
+#         ylab = "Frequency",
+#         main = "Copy Number, Expression Correlation"
+#       )
+#     )
+#   )
 }
 
 CorrelationPlots <- function() {
