@@ -1,4 +1,5 @@
 library(shiny)
+library(shinyRGL)
 source('visualization_config.R')
 
 shinyServer(function(input, output) {
