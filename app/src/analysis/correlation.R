@@ -32,7 +32,7 @@ CorrelationsByGene <- function() {
   })
 }
 
-CorrelationHistogram <- function() {
+CorrelationHistogram <- function(data) {
   correlations.by.gene <- CorrelationsByGene()
   list(
     list(
@@ -42,15 +42,6 @@ CorrelationHistogram <- function() {
              xlab = "Correlation",
              ylab = "Frequency",
              main = "Copy Number, Expression Correlation")
-      }
-    ),
-    list(
-      graph.type = "plot",
-      visualization = function() {
-        plot(x = unlist(correlations.by.gene),
-             xlab = "Gene",
-             ylab = "Correlation",
-             main = "Correlations")
       }
     )
   )
