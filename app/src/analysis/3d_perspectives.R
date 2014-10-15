@@ -1,33 +1,36 @@
 source('src/data/db.R')
 library(shinyRGL)
 
-GetExpressionAndCopyNumber <- function() {
+GetExpressionCopyNumberAndCCLEName <- function() {
   ApplyByGene(function(data, gene.label) {
     print(paste("Computing for", gene.label))
-    data$quantileNormalizedRMAExpression, data$snpCopyNumber2Log2)
+    list(data$quantileNormalizedRMAExpression, data$snpCopyNumber2Log2, data$ccleName)
   })
 }
 
 ExpressionAndCopyNumberPerspectives <- function() {
+  data <- GetAll()
+  data$symbol <- factor(data$symbol)
+  data$ccleName <- factor(data$ccleName)
+  x <- levels(data$symbol)
+  y <- levels(data$ccleName)
   
-}
-
-CorrelationHistogram <- function(data) {
-  expression.and.copy.number <- GetExpressionAndCopyNumber()
+  gene.expression.z <- data.matrix(data[, c(1, 2, 3)])
+  copy.number.z <- data.matrix(data[, c(1, 2, 4)])
+  
   list(
     list(
       graph.type = "plot3d",
       visualization = function() {
-        
         lights3d()
-        
-        
-        
-        hist(x = unlist(correlations.by.gene),
-             xlab = "Correlation",
-             ylab = "Frequency",
-             main = "Copy Number, Expression Correlation")
-      }
+        surface3d(x, y, gene.expression.z, 
+                  xlab = 'Gene symbol',
+                  ylab = 'Cell Line Name',
+                  zlab = 'Gene expression level'
+                  col = 'blue')
+        surface3d(x, y, copy.number.z,
+                  zlab = 'Gene expression level'
+                  col = 'blue')
     )
   )
 
