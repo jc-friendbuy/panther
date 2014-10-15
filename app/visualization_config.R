@@ -1,12 +1,10 @@
 source('src/analysis/basic.R')
 source('src/analysis/correlation.R')
+source('src/analysis/3d_perspectives.R')
 
 visualization.list <- list(
-  # TAE684 = TAE684,
-  # AEW541 = AEW541,
-  # Volcano = Volcano,
-  # Surface = Surface
-  CorrelationHistogram = CorrelationHistogram
+  CorrelationHistogram = CorrelationHistogram,
+  ExpressionAndCopyNumberPerspectives = ExpressionAndCopyNumberPerspectives
 )
 
 GetVisualizationFunctionChoices <- function() {
