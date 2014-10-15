@@ -1,7 +1,4 @@
 library(shiny)
-library(shinyRGL)
-library(rgl)
-library(MASS)
 source('visualization_config.R')
 
 shinyServer(function(input, output) {
