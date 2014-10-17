@@ -35,7 +35,7 @@ ApplyByGene <- function(fun) {
   output
 }
 
-ApplyForGene <- function(fun, symbol) {
+ApplyForGene <- function(symbol, fun) {
   # fun: function(data.frame, group.label, ...)
   conn <- GetConnection()
   statement <- paste0(
