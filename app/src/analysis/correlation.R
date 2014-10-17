@@ -50,32 +50,60 @@ CorrelationHistogram <- function(data) {
 CorrelationPlots <- function() {
   correlations.by.gene <- CorrelationsByGene()
   genes.to.plot <- c('BEND7', 'ORAOV1', 'PLD5')
-  plot.list <- list()
-  for (gene.symbol in genes.to.plot) {
-    data <- GetDataByGeneSymbol(gene.symbol)
-    x <- data$snpCopyNumber2Log2
-    y <- data$quantileNormalizedRMAExpression
-    corr <- correlations.by.gene[[gene.symbol]]
-    individual.plot <- list(
-      graph.type = 'plot',
-      visualization = function() {
-        plot(x = x,
-             y = y,
-             xlab = 'Gene Copy Number',
-             ylab = 'Gene Expression',
-             main = paste0(
-               'GCN and GE Correlation for ', 
-               gene.symbol, 
-               '(', 
-               format(round(corr, 4), nsmall = 4),
-               ').')
-             )
-        model <- lm(y ~ x)
-        abline(model)
-      }
-    )
-    plot.list[[length(plot.list) + 1]] <- individual.plot
-  }
-  plot.list
+  lapply(genes.to.plot, GetCorrelationPlot)
+ 
+#   plot.list <- list()
+#   for (index in 1:length(genes.to.plot)) {
+#     individual.plot <- list(
+#       graph.type = 'plot',
+#       visualization = function() {
+#         gene.symbol <- genes.to.plot[index]
+#         data <- GetDataByGeneSymbol(gene.symbol)
+#         x <- data$snpCopyNumber2Log2
+#         y <- data$quantileNormalizedRMAExpression
+#         corr <- correlations.by.gene[[gene.symbol]]
+#         plot(x = x,
+#              y = y,
+#              xlab = 'Gene Copy Number',
+#              ylab = 'Gene Expression',
+#              main = paste0(
+#                'GCN and GE Correlation for ', 
+#                gene.symbol, 
+#                '(', 
+#                format(round(corr, 4), nsmall = 4),
+#                ').')
+#              )
+#         model <- lm(y ~ x)
+#         abline(model)
+#       }
+#     )
+#     plot.list[[length(plot.list) + 1]] <- individual.plot
+#   }
+#   plot.list
+}
+
+GetCorrelationPlot <- function(gene.symbol) {
+  list (
+    graph.type = "plot",
+    visualization = function () {
+      data <- GetDataByGeneSymbol(gene.symbol)
+      x <- data$snpCopyNumber2Log2
+      y <- data$quantileNormalizedRMAExpression
+      corr <- correlations.by.gene[[gene.symbol]]
+      plot(x = x,
+           y = y,
+           xlab = 'Gene Copy Number',
+           ylab = 'Gene Expression',
+           main = paste0(
+             'GCN and GE Correlation for ', 
+             gene.symbol, 
+             '(', 
+             format(round(corr, 4), nsmall = 4),
+             ').')
+      )
+      model <- lm(y ~ x)
+      abline(model)
+    }
+  )
 }
 
