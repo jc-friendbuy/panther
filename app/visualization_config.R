@@ -4,7 +4,8 @@ source('src/analysis/3d_perspectives.R')
 
 visualization.list <- list(
   CorrelationHistogram = CorrelationHistogram,
-  ExpressionAndCopyNumberPerspectives = ExpressionAndCopyNumberPerspectives
+  CorrelationPlots = CorrelationPlots
+#   ExpressionAndCopyNumberPerspectives = ExpressionAndCopyNumberPerspectives
 )
 
 GetVisualizationFunctionChoices <- function() {
