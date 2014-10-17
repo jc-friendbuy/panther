@@ -29,6 +29,7 @@ SelectRenderingFunction <- function(visualization.function) {
   )
 }
 
+
 ExecuteVisualization <- function(visualization) {
   visualization.to.execute <- visualization.list[[as.integer(visualization)]]
   visualization.to.execute()
