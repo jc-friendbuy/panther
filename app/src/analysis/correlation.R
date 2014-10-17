@@ -53,7 +53,7 @@ CorrelationHistogram <- function(data) {
   )
 }
 
-CorrelationPlots <- function() {
+CorrelationFits <- function() {
   list(
     list (
       graph.type = "plot",
