@@ -4,7 +4,6 @@ source('visualization_config.R')
 
 shinyServer(function(input, output) {
   
-  # Note this is executed on page load and every time the submit button is clicked.
   output$output.plots <- renderUI({
     
     computed.visualizations <- ExecuteVisualization(
@@ -31,9 +30,6 @@ SelectRenderingFunction <- function(visualization.function) {
 }
 
 ExecuteVisualization <- function(visualization) {
-  visualization.index <- as.integer(visualization)
-  if (visualization.index > 1) {
-    visualization.to.execute <- visualization.list[[visualization.index]]
-    visualization.to.execute()
-  }
+  visualization.to.execute <- visualization.list[[as.integer(visualization)]]
+  visualization.to.execute()
 }
