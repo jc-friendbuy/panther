@@ -49,7 +49,7 @@ CorrelationHistogram <- function(data) {
 
 CorrelationPlots <- function() {
   correlations.by.gene <- CorrelationsByGene()
-  genes.to.plot(c('BEND7', 'ORAOV1', 'PLD5'))
+  genes.to.plot <- c('BEND7', 'ORAOV1', 'PLD5')
   plot.list <- list()
   for (gene.symbol in genes.to.plot) {
     data <- GetDataByGeneSymbol(gene.symbol)
@@ -58,6 +58,7 @@ CorrelationPlots <- function() {
       visualization = function() {
       }
     )
+    plot.list[[length(plot.list) + 1]] <- individual.plot
   }
   plot.list
 }
