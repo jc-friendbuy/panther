@@ -16,11 +16,33 @@ GetAll <- function() {
   result
 }
 
+GetDataByGeneSymbol <- function(symbol) {
+  conn <- GetConnection()
+  statement <- paste0("select * from GeneticProfileMatView where symbol = '", symbol, "';")
+  result <- dbGetQuery(conn, statement)
+  CloseConnection(conn)
+  result
+}
+
 ApplyByGene <- function(fun) {
   # fun: function(data.frame, group.label, ...)
   conn <- GetConnection()
   result <- dbSendQuery(conn, 
                         "select * from GeneticProfileMatView order by symbol;")
+  output <- dbApply(result, INDEX = 'symbol', fun)
+  CloseConnection(conn)
+  output
+}
+
+ApplyForGene <- function(symbol, fun) {
+  # fun: function(data.frame, group.label, ...)
+  conn <- GetConnection()
+  statement <- paste0(
+    "select * from GeneticProfileMatView where symbol = '",
+    symbol,
+    "' order by symbol;"
+    )
+  result <- dbSendQuery(conn, statement)
   output <- dbApply(result, INDEX = 'symbol', fun)
   CloseConnection(conn)
   output

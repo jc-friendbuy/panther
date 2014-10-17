@@ -3,8 +3,10 @@ source('src/analysis/correlation.R')
 source('src/analysis/3d_perspectives.R')
 
 visualization.list <- list(
+  '--' = '',
   CorrelationHistogram = CorrelationHistogram,
-  CorrelationPlots = CorrelationPlots,
+  CorrelationFits = CorrelationFits,
+  SideBySideCNAndGE = SideBySideCNAndGE
   ExpressionAndCopyNumberPerspectives = ExpressionAndCopyNumberPerspectives
 )
 
