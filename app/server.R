@@ -29,8 +29,10 @@ SelectRenderingFunction <- function(visualization.function) {
   )
 }
 
-
 ExecuteVisualization <- function(visualization) {
-  visualization.to.execute <- visualization.list[[as.integer(visualization)]]
-  visualization.to.execute()
+  visualization.index <- as.integer(visualization)
+  if (visualization.index > 1) {
+    visualization.to.execute <- visualization.list[[visualization.index]]
+    visualization.to.execute()
+  }
 }
