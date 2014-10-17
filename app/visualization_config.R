@@ -1,10 +1,12 @@
 source('src/analysis/basic.R')
 source('src/analysis/correlation.R')
+source('src/analysis/3d_perspectives.R')
 
 visualization.list <- list(
   CorrelationHistogram = CorrelationHistogram,
   CorrelationFits = CorrelationFits,
   SideBySideCNAndGE = SideBySideCNAndGE
+#   ExpressionAndCopyNumberPerspectives = ExpressionAndCopyNumberPerspectives
 )
 
 GetVisualizationFunctionChoices <- function() {
