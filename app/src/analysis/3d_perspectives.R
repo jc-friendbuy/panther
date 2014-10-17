@@ -1,6 +1,7 @@
 source('src/data/db.R')
 library(rgl)
 library(shinyRGL)
+library(reshape2)
 
 GetExpressionCopyNumberAndCCLEName <- function() {
   ApplyByGene(function(data, gene.label) {
@@ -10,32 +11,36 @@ GetExpressionCopyNumberAndCCLEName <- function() {
 }
 
 ExpressionAndCopyNumberPerspectives <- function() {
-  all.data <- GetAll()
-  data <- data.frame()
-  all.data$symbol <- factor(all.data$symbol)
-  all.data$ccleName <- factor(all.data$ccleName)
-  x <- levels(all.data$symbol)
-  y <- levels(all.data$ccleName)
-  
-  sapply(split(all.data, all.data$symbol), function(gene.data.frame) {
-      sapply(split(gene.data.frame, gene.data.frame$ccleName), function(d) {
-        data <- rbind(data, d[,])
-      })
-  })
-  
-  head(data, 5)
-  
-#   gene.expression.z <- data.matrix(data[, c(1, 2, 3)])
-#   copy.number.z <- data.matrix(data[, c(1, 2, 4)])
-#   
-#   surface3d(x, y, gene.expression.z, 
-#             xlab = 'Gene symbol',
-#             ylab = 'Cell Line Name',
-#             zlab = 'Gene expression level',
-#             col = 'blue')
-#   surface3d(x, y, copy.number.z,
-#             zlab = 'Gene expression level',
-#             col = 'red')
+  list(
+    list(
+      graph.type = "plot3d",
+      visualization = function () {
+        all.data <- GetAll()
+        all.data$symbol <- factor(all.data$symbol)
+        all.data$ccleName <- factor(all.data$ccleName)
+        y <- 1:length(levels(all.data$symbol))
+        x <- 1:length(levels(all.data$ccleName))
+        
+        gene.expression.data <- all.data[, c('symbol', 'ccleName', 'quantileNormalizedRMAExpression')]
+        gene.expression.z <- dcast(gene.expression.data, symbol ~ ccleName)
+        
+        copy.number.data <- all.data[, c('symbol', 'ccleName', 'snpCopyNumber2Log2')]
+        copy.number.z <- dcast(copy.number.data, symbol ~ ccleName)
+        z <- gene.expression.z[, 2:ncol(gene.expression.z)]
+        
+        lights3d()
+        surface3d(x = x,
+                  y = y,
+                  z = data.matrix(z),
+                  ylab = 'Gene symbol',
+                  xlab = 'Cell Line Name',
+                  zlab = 'Gene expression level',
+                  col = 'blue'
+        )
+      }
+    )
+  )
+}
   
 #   list(
 #     list(
@@ -53,7 +58,7 @@ ExpressionAndCopyNumberPerspectives <- function() {
 #       }
 #     )
 #   )
-}
+# }
 # 
 # # Drug data - not ready
 # # drug.data <- data.table(read.csv('data/drug.csv'))
