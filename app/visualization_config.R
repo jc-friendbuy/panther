@@ -6,6 +6,7 @@ visualization.list <- list(
   # AEW541 = AEW541,
   # Volcano = Volcano,
   # Surface = Surface
+  '--' = '',
   CorrelationHistogram = CorrelationHistogram
 )
 

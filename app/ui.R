@@ -35,8 +35,7 @@ shinyUI(fluidPage(
                   label = h3("Visualización"),
                   choices = GetVisualizationFunctionChoices(),
                   selected = 1),
-      actionButton("btn.display.selected.visualization",
-                   label = "Mostrar")
+      submitButton("Mostrar")
     ),
     
     mainPanel(
