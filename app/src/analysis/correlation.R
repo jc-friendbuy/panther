@@ -53,12 +53,36 @@ CorrelationPlots <- function() {
   plot.list <- list()
   for (gene.symbol in genes.to.plot) {
     data <- GetDataByGeneSymbol(gene.symbol)
-    individual.plot <- list(
-      graph.type = 'plot',
-      visualization = function() {
-      }
-    )
-    plot.list[[length(plot.list) + 1]] <- individual.plot
+    x <- data$snpCopyNumber2Log2
+    y <- data$quantileNormalizedRMAExpression
+    corr <- correlations.by.gene[[gene.symbol]]
+#     individual.plot <- list(
+#       graph.type = 'plot',
+#       visualization = function() {
+#         plot(x = x,
+#              y = y,
+#              xlab = 'Gene Copy Number',
+#              ylab = 'Gene Expression')
+#         model <- lm(y ~ x)
+#         abline(model)
+#       }
+#     )
+    
+        plot(x = x,
+             y = y,
+             xlab = 'Gene Copy Number',
+             ylab = 'Gene Expression',
+             main = paste0(
+               'GCN and GE Correlation for ', 
+               gene.symbol, 
+               '(', 
+               format(round(corr, 4), nsmall = 4),
+               ').'
+               )
+             )
+        model <- lm(y ~ x)
+        abline(model)
+#     plot.list[[length(plot.list) + 1]] <- individual.plot
   }
   plot.list
 }
