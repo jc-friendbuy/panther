@@ -16,6 +16,14 @@ GetAll <- function() {
   result
 }
 
+GetDataByGeneSymbol <- function(symbol) {
+  conn <- GetConnection()
+  statement <- paste0("select * from GeneticProfileMatView where symbol = ", symbol, ";")
+  result <- dbGetQuery(conn, statement)
+  CloseConnection(conn)
+  result
+}
+
 ApplyByGene <- function(fun) {
   # fun: function(data.frame, group.label, ...)
   conn <- GetConnection()
