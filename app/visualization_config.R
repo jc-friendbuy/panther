@@ -3,7 +3,9 @@ source('src/analysis/correlation.R')
 
 visualization.list <- list(
   CorrelationHistogram = CorrelationHistogram,
-  CorrelationPlots = CorrelationPlots
+  CorrelationFits = CorrelationFits,
+  SideBySideCNAndGE = SideBySideCNAndGE
+  
 )
 
 GetVisualizationFunctionChoices <- function() {
