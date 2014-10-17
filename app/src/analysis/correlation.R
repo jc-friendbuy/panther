@@ -45,21 +45,20 @@ CorrelationHistogram <- function(data) {
       }
     )
   )
-  
-#   list(
-#     list(
-#       graphing.function.name = "hist",
-#       args = list(
-#         x = unlist(correlations.by.gene),
-#         xlab = "Correlation",
-#         ylab = "Frequency",
-#         main = "Copy Number, Expression Correlation"
-#       )
-#     )
-#   )
 }
 
 CorrelationPlots <- function() {
-  
+  correlations.by.gene <- CorrelationsByGene()
+  genes.to.plot(c('BEND7', 'ORAOV1', 'PLD5'))
+  plot.list <- list()
+  for (gene.symbol in genes.to.plot) {
+    data <- GetDataByGeneSymbol(gene.symbol)
+    individual.plot <- list(
+      graph.type = 'plot',
+      visualization = function() {
+      }
+    )
+  }
+  plot.list
 }
 
