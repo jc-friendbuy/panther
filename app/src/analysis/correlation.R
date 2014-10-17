@@ -56,18 +56,9 @@ CorrelationPlots <- function() {
     x <- data$snpCopyNumber2Log2
     y <- data$quantileNormalizedRMAExpression
     corr <- correlations.by.gene[[gene.symbol]]
-#     individual.plot <- list(
-#       graph.type = 'plot',
-#       visualization = function() {
-#         plot(x = x,
-#              y = y,
-#              xlab = 'Gene Copy Number',
-#              ylab = 'Gene Expression')
-#         model <- lm(y ~ x)
-#         abline(model)
-#       }
-#     )
-    
+    individual.plot <- list(
+      graph.type = 'plot',
+      visualization = function() {
         plot(x = x,
              y = y,
              xlab = 'Gene Copy Number',
@@ -77,12 +68,13 @@ CorrelationPlots <- function() {
                gene.symbol, 
                '(', 
                format(round(corr, 4), nsmall = 4),
-               ').'
-               )
+               ').')
              )
         model <- lm(y ~ x)
         abline(model)
-#     plot.list[[length(plot.list) + 1]] <- individual.plot
+      }
+    )
+    plot.list[[length(plot.list) + 1]] <- individual.plot
   }
   plot.list
 }
