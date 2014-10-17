@@ -34,3 +34,17 @@ ApplyByGene <- function(fun) {
   CloseConnection(conn)
   output
 }
+
+ApplyForGene <- function(fun, symbol) {
+  # fun: function(data.frame, group.label, ...)
+  conn <- GetConnection()
+  statement <- paste0(
+    "select * form GeneticProfileMatView where symbol = '",
+    symbol,
+    "' order by symbol;"
+    )
+  result <- dbSendQuery(conn, statement)
+  output <- dbApply(result, INDEX = 'symbol', fun)
+  CloseConnection(conn)
+  output
+}
