@@ -30,6 +30,7 @@ SelectRenderingFunction <- function(visualization.function) {
   )
 }
 
+
 ExecuteVisualization <- function(visualization) {
   visualization.index <- as.integer(visualization)
   if (visualization.index > 1) {
