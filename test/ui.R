@@ -1,10 +1,9 @@
 library(shiny)
 library(shinyRGL)
-source('visualization_config.R')
 
 shinyUI(fluidPage(
   
-  titlePanel("Prototipo de visualización de datos"),
+  titlePanel("PRUEBAS"),
   
   sidebarLayout(
     sidebarPanel(
@@ -12,7 +11,7 @@ shinyUI(fluidPage(
     ),
     
     mainPanel(
-      uiOutput('output.plots')
+      plotOutput('plot')
     ),
     position = "right"
   )
