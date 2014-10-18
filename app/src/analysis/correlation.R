@@ -3,7 +3,6 @@ library(shiny)
 
 CorrelationsByGene <- function() {
   ApplyByGene(function(data, gene.label) {
-#     print(paste("Computing for", gene.label))
     cor(data$quantileNormalizedRMAExpression, data$snpCopyNumber2Log2)
   })
 }
