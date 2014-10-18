@@ -28,7 +28,7 @@ ExpressionAndCopyNumberPerspectives <- function() {
         copy.number.z <- dcast(copy.number.data, symbol ~ ccleName)
         z <- gene.expression.z[, 2:ncol(gene.expression.z)]
         
-        lights3d()
+        light3d()
         surface3d(x = x,
                   y = y,
                   z = data.matrix(z),
