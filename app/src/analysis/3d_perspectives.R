@@ -18,8 +18,8 @@ ExpressionAndCopyNumberPerspectives <- function() {
         all.data <- GetAll()
         all.data$symbol <- factor(all.data$symbol)
         all.data$ccleName <- factor(all.data$ccleName)
-        y <- 1:length(levels(all.data$symbol))
-        x <- 1:length(levels(all.data$ccleName))
+        x <- 1:length(levels(all.data$symbol))
+        y <- 1:length(levels(all.data$ccleName))
         
         gene.expression.data <- all.data[, c('symbol', 'ccleName', 'quantileNormalizedRMAExpression')]
         gene.expression.z <- dcast(gene.expression.data, symbol ~ ccleName)
