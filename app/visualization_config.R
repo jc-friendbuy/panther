@@ -6,6 +6,7 @@ visualization.list <- list(
   CorrelationHistogram = CorrelationHistogram,
   CorrelationFits = CorrelationFits,
   SideBySideCNAndGE = SideBySideCNAndGE
+#   ExpressionAndCopyNumberPerspectives = ExpressionAndCopyNumberPerspectives
 )
 
 GetVisualizationFunctionChoices <- function() {
