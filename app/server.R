@@ -9,14 +9,10 @@ shinyServer(function(input, output) {
     computed.visualizations <- ExecuteVisualization(
       input$visualization.select
     )
-        
-    # Execute each visualization and render the results to the appropriate output element.
-    current.id <- 0
+
     lapply(computed.visualizations, function(visualization) {
-      current.id <- current.id + 1
       render.function <- SelectRenderingFunction(visualization$graph.type)
-      visualization.id <- paste0('visualization', current.id)
-      output[[visualization.id]] <- render.function(visualization$visualization())
+      render.function(visualization$visualization())
     })
   })
 })
