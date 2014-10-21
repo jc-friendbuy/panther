@@ -30,11 +30,14 @@ CorrelationHistogram <- function(data) {
 }
 
 CorrelationFits <- function() {
-  list(
-    list (
+  visualizations <- list()
+  selected.gene.symbols <- c('BEND7', 'ORAOV1', 'PLD5')
+  lapply(selected.gene.symbols, function(gene.symbol) {
+    force(gene.symbol)
+    list(
       graph.type = "plot",
       visualization = function() {
-        gene.symbol <- 'BEND7'
+        force(gene.symbol)
         data <- GetDataByGeneSymbol(gene.symbol)
         x <- data$snpCopyNumber2Log2
         y <- data$quantileNormalizedRMAExpression
@@ -49,59 +52,12 @@ CorrelationFits <- function() {
                gene.symbol, 
                '(', 
                format(round(corr, 4), nsmall = 4),
-               ').')
-        )
-        model <- lm(y ~ x)
-        abline(model)
-      }
-    ),
-    list (
-      graph.type = "plot",
-      visualization = function() {
-        gene.symbol <- 'ORAOV1'
-        data <- GetDataByGeneSymbol(gene.symbol)
-        x <- data$snpCopyNumber2Log2
-        y <- data$quantileNormalizedRMAExpression
-        corr <- CorrelationForGene(gene.symbol)
-        plot(x = x,
-             y = y,
-             xlab = 'Gene Copy Number',
-             ylab = 'Gene Expression',
-             main = paste0(
-               'GCN and GE Correlation for ', 
-               gene.symbol, 
-               '(', 
-               format(round(corr, 4), nsmall = 4),
-               ').')
-        )
-        model <- lm(y ~ x)
-        abline(model)
-      }
-    ),
-    list (
-      graph.type = "plot",
-      visualization = function() {
-        gene.symbol <- 'PLD5'
-        data <- GetDataByGeneSymbol(gene.symbol)
-        x <- data$snpCopyNumber2Log2
-        y <- data$quantileNormalizedRMAExpression
-        corr <- CorrelationForGene(gene.symbol)
-        plot(x = x,
-             y = y,
-             xlab = 'Gene Copy Number',
-             ylab = 'Gene Expression',
-             main = paste0(
-               'GCN and GE Correlation for ', 
-               gene.symbol, 
-               '(', 
-               format(round(corr, 4), nsmall = 4),
-               ').')
-        )
+               ').'))
         model <- lm(y ~ x)
         abline(model)
       }
     )
-  )
+  })
 }
 
 SideBySideCNAndGE <- function() {
