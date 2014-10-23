@@ -6,6 +6,6 @@ package.list <- c(
   'shinyRGL'
   )
 install.packages(package.list)
-setwd('../app/')
 
-print('Para correr el programa, debe ejecutar `source("server.R")` y luego `shiny::runApp("app")`')
+print('Asegúrese de que el directorio de trabajo esté establecido al directorio `app` (por ejemplo: setwd("~/Projects/panther/app/")')
+print('Luego, para correr el programa, debe ejecutar `source("server.R")` y luego `shiny::runApp("app")`')
