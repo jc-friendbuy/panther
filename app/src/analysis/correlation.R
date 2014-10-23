@@ -35,7 +35,6 @@ CorrelationFits <- function() {
     list(
       graph.type = "plot",
       visualization = function() {
-        force(gene.symbol)
         data <- GetDataByGeneSymbol(gene.symbol)
         x <- data$snpCopyNumber2Log2
         y <- data$quantileNormalizedRMAExpression
@@ -46,9 +45,9 @@ CorrelationFits <- function() {
              xlab = 'Gene Copy Number',
              ylab = 'Gene Expression',
              main = paste0(
-               'GCN and GE Correlation for ', 
-               gene.symbol, 
-               '(', 
+               'GCN and GE Correlation for ',
+               gene.symbol,
+               '(',
                format(round(corr, 4), nsmall = 4),
                ').'))
         model <- lm(y ~ x)
@@ -71,19 +70,19 @@ SideBySideCNAndGE <- function() {
 #         cn.normalization.value <- mean(ge) / 2
         cn.normalization.value <- 0
         normalized.cn <- cn + cn.normalization.value
-        
+
         plot.title <- paste0(
           'Expression (red) and Copy Number + ',
           format(round(cn.normalization.value, 2), nsmall = 2),
-          ' (green) for ', 
+          ' (green) for ',
           gene.symbol)
-        
+
         x <- 1:length(cn)
-        ylim <- c(min(c(min(normalized.cn), min(ge))), 
+        ylim <- c(min(c(min(normalized.cn), min(ge))),
                   max(c(max(normalized.cn), max(ge))))
-        
-        plot(x = x, 
-             y = ge, 
+
+        plot(x = x,
+             y = ge,
              col='red',
              xlab = 'Cancer Cell Line (#)',
              type = 'p',
