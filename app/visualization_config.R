@@ -1,12 +1,13 @@
 source('src/analysis/basic.R')
 source('src/analysis/correlation.R')
+source('src/analysis/genomic_location.R')
 
 visualization.list <- list(
   '--' = '',
-  CorrelationHistogram = CorrelationHistogram,
-  CorrelationFits = CorrelationFits,
-  SideBySideCNAndGE = SideBySideCNAndGE
-#   ExpressionAndCopyNumberPerspectives = ExpressionAndCopyNumberPerspectives
+  'Correlation Histogram' = CorrelationHistogram,
+  'Linear fits to correlation indexes' = CorrelationFits,
+  'Copy Number and Gene Expression relationship' = SideBySideCNAndGE,
+  'Genomic location analysis' = GenomicLocations
 )
 
 GetVisualizationFunctionChoices <- function() {
