@@ -21,7 +21,8 @@ SelectRenderingFunction <- function(visualization.function) {
   switch(visualization.function,
     plot = renderPlot,
     hist = renderPlot,
-    plot3d = renderWebGL
+    plot3d = renderWebGL,
+    text = renderText
   )
 }
 
