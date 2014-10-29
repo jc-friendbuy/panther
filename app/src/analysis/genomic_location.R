@@ -68,7 +68,16 @@ GenomicLocationsForSelectedCellLines <- function() {
   # returning a list of plot definitions.
   all.plots <- lapply(lines, function(line) {
     force(line)
-    GenomicLocationsByCellLine(line, data)
+    result <- GenomicLocationsByCellLine(line, data)
+    append(
+      list(
+        graph.type = 'text',
+        visualization = function () {
+          paste('Genomic location for', line)
+        }
+      ),
+      result
+    )
   })
   unlist(all.plots, recursive = FALSE)
 }
