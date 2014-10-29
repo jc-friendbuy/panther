@@ -9,7 +9,9 @@ GenomicLocations <- function() {
   data$normalized.genomic.location <- paste0(
     data$numeric.chromosome, data$chromosomeLocationStart
   )
-  x <- data$normalized.genomic.location
+  ordered <- with(data, order(numeric.chromosome, chromosomeLocationStart))
+  data <- data[ordered, ]
+  x <- 1:nrow(data)
   
   list(
     list(
