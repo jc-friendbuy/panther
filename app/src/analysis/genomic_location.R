@@ -14,46 +14,6 @@ GetGenomicLocationOrderedGeneticProfile <- function() {
   data[ordered, ]
 }
 
-GenomicLocations <- function() {
-  data <- GetGenomicLocationOrderedGeneticProfile()
-  x <- 1:nrow(data)
-  
-  list(
-    list(
-      graph.type = "plot",
-      visualization = function() {
-        y <- data$snpCopyNumber2Log2
-        ylim <- c(min(y), max(y))
-        
-        plot(x = x,
-             y = y,
-             xlab = 'Genomic location',
-             ylab = 'Gene Copy Number',
-             main = 'Gene Copy Number by Genomic Location',
-             type = 'p',
-             ylim = ylim,
-             pch = 20)
-      }
-    ), 
-    list(
-      graph.type = "plot",
-      visualization = function() {
-        y <- data$quantileNormalizedRMAExpression
-        ylim <- c(min(y), max(y))
-        
-        plot(x = x,
-             y = y,
-             xlab = 'Genomic location',
-             ylab = 'Gene Expression',
-             main = 'Gene Expression by Genomic Location',
-             type = 'p',
-             ylim = ylim,
-             pch = 20)
-      }
-    )
-  )
-}
-
 GetGenomicLocationPlots <- function(data) {
   x <- 1:nrow(data)
   list(
@@ -92,8 +52,12 @@ GetGenomicLocationPlots <- function(data) {
   )
 }
 
+GenomicLocations <- function() {
+  data <- GetGenomicLocationOrderedGeneticProfile()
+  GetGenomicLocationPlots(data)
+}
+
 GenomicLocationsByCellLine <- function(line, data) {
   line.data <- data[with(data, ccleName == line), ]
-  x <- 1:nrow(line.data)
-  
+  GetGenomicLocationPlots(line.data)
 }
