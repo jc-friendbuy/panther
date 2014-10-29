@@ -16,7 +16,7 @@ shinyUI(fluidPage(
     ),
     
     mainPanel(
-      uiOutput('output.plots')
+      uiOutput('visualization.output')
     ),
     position = "right"
   )

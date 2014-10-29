@@ -4,7 +4,7 @@ source('visualization_config.R')
 
 shinyServer(function(input, output) {
   
-  output$output.plots <- renderUI({
+  output$visualization.output <- renderUI({
     
     computed.visualizations <- ExecuteVisualization(
       input$visualization.select
