@@ -57,6 +57,18 @@ GenomicLocations <- function() {
   GetGenomicLocationPlots(data)
 }
 
+GenomicLocationsForSelectedCellLines <- function() {
+  lines <- c('AU565_BREAST', 'BT474_BREAST', 'BT483_BREAST')
+  data <- GetGenomicLocationOrderedGeneticProfile()
+
+  
+  all.plots <- lapply(lines, function(line) {
+    force(line)
+    GenomicLocationsByCellLine(line, data)
+  })
+  all.plots
+}
+
 GenomicLocationsByCellLine <- function(line, data) {
   line.data <- data[with(data, ccleName == line), ]
   GetGenomicLocationPlots(line.data)
