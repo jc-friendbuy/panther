@@ -54,15 +54,13 @@ GenomicLocations <- function() {
   )
 }
 
-GenomicLocationsByCellLine <- function(line, data) {
-  line.data <- data[with(data, ccleName == line), ]
-  x <- 1:nrow(line.data)
-  
+GetGenomicLocationPlots <- function(data) {
+  x <- 1:nrow(data)
   list(
     list(
       graph.type = "plot",
       visualization = function() {
-        y <- line.data$snpCopyNumber2Log2
+        y <- data$snpCopyNumber2Log2
         ylim <- c(min(y), max(y))
         
         plot(x = x,
@@ -78,7 +76,7 @@ GenomicLocationsByCellLine <- function(line, data) {
     list(
       graph.type = "plot",
       visualization = function() {
-        y <- line.data$quantileNormalizedRMAExpression
+        y <- data$quantileNormalizedRMAExpression
         ylim <- c(min(y), max(y))
         
         plot(x = x,
@@ -92,4 +90,10 @@ GenomicLocationsByCellLine <- function(line, data) {
       }
     )
   )
+}
+
+GenomicLocationsByCellLine <- function(line, data) {
+  line.data <- data[with(data, ccleName == line), ]
+  x <- 1:nrow(line.data)
+  
 }
