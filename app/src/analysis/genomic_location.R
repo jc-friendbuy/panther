@@ -53,3 +53,43 @@ GenomicLocations <- function() {
     )
   )
 }
+
+GenomicLocationsByCellLine <- function(line, data) {
+  line.data <- data[with(data, ccleName == line), ]
+  x <- 1:nrow(line.data)
+  
+  list(
+    list(
+      graph.type = "plot",
+      visualization = function() {
+        y <- line.data$snpCopyNumber2Log2
+        ylim <- c(min(y), max(y))
+        
+        plot(x = x,
+             y = y,
+             xlab = 'Genomic location',
+             ylab = 'Gene Copy Number',
+             main = 'Gene Copy Number by Genomic Location',
+             type = 'p',
+             ylim = ylim,
+             pch = 20)
+      }
+    ), 
+    list(
+      graph.type = "plot",
+      visualization = function() {
+        y <- line.data$quantileNormalizedRMAExpression
+        ylim <- c(min(y), max(y))
+        
+        plot(x = x,
+             y = y,
+             xlab = 'Genomic location',
+             ylab = 'Gene Expression',
+             main = 'Gene Expression by Genomic Location',
+             type = 'p',
+             ylim = ylim,
+             pch = 20)
+      }
+    )
+  )
+}
