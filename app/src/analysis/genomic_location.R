@@ -61,12 +61,16 @@ GenomicLocationsForSelectedCellLines <- function() {
   lines <- c('AU565_BREAST', 'BT474_BREAST', 'BT483_BREAST')
   data <- GetGenomicLocationOrderedGeneticProfile()
 
-  
+  # Lapply returns a list of list items, each of which is a plot definition;
+  # it needs to be unlisted one level so that it is list of plot definitions,
+  # as is expected by calling functions.
+  # This is due to GetGenomicLocationPlots, called in GenomicLocationsByCellLine,
+  # returning a list of plot definitions.
   all.plots <- lapply(lines, function(line) {
     force(line)
     GenomicLocationsByCellLine(line, data)
   })
-  all.plots
+  unlist(all.plots, recursive = FALSE)
 }
 
 GenomicLocationsByCellLine <- function(line, data) {
