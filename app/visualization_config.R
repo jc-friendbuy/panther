@@ -7,7 +7,8 @@ visualization.list <- list(
   'Correlation Histogram' = CorrelationHistogram,
   'Linear fits to correlation indexes' = CorrelationFits,
   'Copy Number and Gene Expression relationship' = SideBySideCNAndGE,
-  'Genomic location analysis' = GenomicLocations
+  'Genomic location analysis' = GenomicLocations,
+  'Genomic location for some cell lines' = GenomicLocationsForSelectedCellLines
 )
 
 GetVisualizationFunctionChoices <- function() {
