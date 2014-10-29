@@ -1,16 +1,21 @@
 source('src/data/db.R')
 
-GenomicLocations <- function() {
+GetGenomicLocationOrderedGeneticProfile <- function() {
   data <- GetAll()
-  x.y.chromosomes.to.replace <- data$chromosome %in% c('X', 'Y')
-  data$chromosome[x.y.chromosomes.to.replace] <- '23'
+  
+  # Replace X and Y chromosome entries with '23' so that conversion to numeric
+  # places them at the end of the chromosome order
+  data$chromosome[data$chromosome %in% c('X', 'Y')] <- '23'
   data$numeric.chromosome <- as.numeric(data$chromosome)
   
-  data$normalized.genomic.location <- paste0(
-    data$numeric.chromosome, data$chromosomeLocationStart
-  )
-  ordered <- with(data, order(numeric.chromosome, chromosomeLocationStart))
-  data <- data[ordered, ]
+  ordered <- with(data, order(numeric.chromosome, 
+                              chromosomeLocationStart, 
+                              chromosomeLocationEnd))
+  data[ordered, ]
+}
+
+GenomicLocations <- function() {
+  data <- GetGenomicLocationOrderedGeneticProfile()
   x <- 1:nrow(data)
   
   list(
