@@ -15,23 +15,19 @@ GetGenomicLocationOrderedGeneticProfile <- function() {
   data[ordered, ]
 }
 
-GetGenomicLocationPlots <- function(data) {
+GetGenomicLocationPlots <- function(data, title = NULL) {
   x <- 1:nrow(data)
-  list(
+  result <- list(
     list(
       graph.type = "plot",
       visualization = function() {
         y <- data$snpCopyNumber2Log2
         ylim <- c(min(y), max(y))
         
-        plot(x = x,
-             y = y,
-             xlab = 'Genomic location',
-             ylab = 'Gene Copy Number',
+        plot(x = x, y = y, 
+             xlab = 'Genomic location', ylab = 'Gene Copy Number',
              main = 'Gene Copy Number by Genomic Location',
-             type = 'p',
-             ylim = ylim,
-             pch = 20)
+             type = 'p', ylim = ylim, pch = 20)
       }
     ), 
     list(
@@ -40,17 +36,22 @@ GetGenomicLocationPlots <- function(data) {
         y <- data$quantileNormalizedRMAExpression
         ylim <- c(min(y), max(y))
         
-        plot(x = x,
-             y = y,
-             xlab = 'Genomic location',
-             ylab = 'Gene Expression',
+        plot(x = x, y = y, 
+             xlab = 'Genomic location', ylab = 'Gene Expression',
              main = 'Gene Expression by Genomic Location',
-             type = 'p',
-             ylim = ylim,
-             pch = 20)
+             type = 'p', ylim = ylim, pch = 20)
       }
     )
   )
+  
+  if (!is.null(title)) {
+    result <- append(result, list(list(
+      graph.type = 'h3',
+      visualization = function() {
+        title
+      })), 0)
+  }
+  result
 }
 
 GenomicLocations <- function() {
@@ -69,25 +70,14 @@ GenomicLocationsForSelectedCellLines <- function() {
   # returning a list of plot definitions.
   all.plots <- lapply(lines, function(line) {
     force(line)
-    result <- GenomicLocationsByCellLine(line, data)
-    title <- paste('Genomic location for', line)
-    append(
-      list(
-        graph.type = 'h3',
-        visualization = function () {
-          'title'
-        }
-      ),
-      list(result),
-      0
-    )
+    GenomicLocationsByCellLine(line, data)
   })
   unlist(all.plots, recursive = FALSE)
 }
 
 GenomicLocationsByCellLine <- function(line, data) {
   line.data <- data[with(data, ccleName == line), ]
-  GetGenomicLocationPlots(line.data)
+  GetGenomicLocationPlots(line.data, title = paste('Genomic location for', line))
 }
 
 TextTest <- function () {
