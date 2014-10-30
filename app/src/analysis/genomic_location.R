@@ -1,3 +1,4 @@
+library(shiny)
 source('src/data/db.R')
 
 GetGenomicLocationOrderedGeneticProfile <- function() {
@@ -72,7 +73,7 @@ GenomicLocationsForSelectedCellLines <- function() {
     title <- paste('Genomic location for', line)
     append(
       list(
-        graph.type = 'text',
+        graph.type = 'h3',
         visualization = function () {
           'title'
         }
@@ -92,9 +93,19 @@ GenomicLocationsByCellLine <- function(line, data) {
 TextTest <- function () {
   list(
     list(
-      graph.type = 'text',
+      graph.type = 'h3',
       visualization = function () {
-        'This is a test of text'
+        'This is a test of text1'
+      }),
+    list(
+      graph.type = 'plot',
+      visualization = function () {
+        plot(1:5, 1:5)
+      }),
+    list(
+      graph.type = 'h3',
+      visualization = function () {
+        'This is a test of text2'
       })
     )
 }
