@@ -79,23 +79,3 @@ GenomicLocationsByCellLine <- function(line, data) {
   line.data <- data[with(data, ccleName == line), ]
   GetGenomicLocationPlots(line.data, title = paste('Genomic location for', line))
 }
-
-TextTest <- function () {
-  list(
-    list(
-      graph.type = 'h3',
-      visualization = function () {
-        'This is a test of text1'
-      }),
-    list(
-      graph.type = 'plot',
-      visualization = function () {
-        plot(1:5, 1:5)
-      }),
-    list(
-      graph.type = 'h3',
-      visualization = function () {
-        'This is a test of text2'
-      })
-    )
-}
